@@ -73,15 +73,6 @@ mpath=`dirname $$mdpath`; rm -rf $$mpath;\
 fi
 endef
 
-# VMware_S
-MVPD_MODULES := mvpkm.ko commkm.ko pvtcpkm.ko oektestkm.ko
-define rm-mvp-modules
-if [ "$(strip $(USES_VMWARE_VIRTUALIZATION))" = "true" ];then\
-rm -f $(addprefix $(KERNEL_MODULES_OUT)/,$(MVPD_MODULES));\
-fi
-endef
-# VMware_E
-
 $(KERNEL_OUT):
 	mkdir -p $(KERNEL_OUT)
 
@@ -111,12 +102,6 @@ $(KERNEL_CONFIG): $(KERNEL_OUT)
 # RF_SW kyuhyung.lee
 ifneq ($(TARGET_BUILD_VARIANT), user)
 	echo "CONFIG_LGE_RSSI_DEBUG=y" >> $(KERNEL_CONFIG)
-# VMware_S
-ifeq ($(strip $(USES_VMWARE_VIRTUALIZATION)), true)
-	echo "CONFIG_VMWARE_MVP_DEBUG=y" >> $(KERNEL_CONFIG)
-	echo "CONFIG_VMWARE_PVTCP_DEBUG=y" >> $(KERNEL_CONFIG)
-endif
-# VMware_E
 endif
 # LGE_CHANGE_END
 endif
@@ -163,9 +148,6 @@ endif
 endif
 	$(mv-modules)
 	$(clean-module-folder)
-# VMware_S
-	$(rm-mvp-modules)
-# VMware_E
 	$(append-dtb)
 
 $(KERNEL_HEADERS_INSTALL): $(KERNEL_OUT) $(KERNEL_CONFIG)
