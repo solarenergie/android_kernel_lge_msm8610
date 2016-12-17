@@ -97,15 +97,9 @@ extern void tcp_time_wait(struct sock *sk, int state, int timeo);
 				 * RFC1122 says that the limit is 100 sec.
 				 * 15 is ~13-30min depending on RTO.
 				 */
-/* 2012-01-17 jk.soh@lge.com LGP_DATA_TCPIP_TCP_SYN_RETRY_CONFIG_UPLUS [START]*/
-//2014.01.15 bongsook.jeong@lge.com Feature is changed with 'android\kernel\arch\arm\configs\xxx_deconfig' and ' android\kernel\net\ipv4\Kconfig
-#ifdef CONFIG_LGP_DATA_TCPIP_TCP_SYN_RETRY_CONFIG_UPLUS
-#define TCP_SYN_RETRIES	 4
-#else
+
 #define TCP_SYN_RETRIES	 5	/* number of times to retry active opening a
 				 * connection: ~180sec is RFC minimum	*/
-#endif
-/* 2012-01-17 jk.soh@lge.com LGP_DATA_TCPIP_TCP_SYN_RETRY_CONFIG_UPLUS [END]*/
 
 #define TCP_SYNACK_RETRIES 5	/* number of times to retry passive opening a
 				 * connection: ~180sec is RFC minimum	*/
