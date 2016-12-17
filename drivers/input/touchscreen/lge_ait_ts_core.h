@@ -537,21 +537,21 @@ enum {
 #if defined(TOUCH_INFO_PRINT)
 #define TOUCH_INFO_MSG(fmt, args...) 	printk(KERN_ERR "[Touch] " fmt, ##args)
 #else
-#define TOUCH_INFO_MSG(fmt, args...)    do {} while(0)
+#define TOUCH_INFO_MSG(fmt, args...)
 #endif
 
 #if defined(TOUCH_ERROR_PRINT)
 #define TOUCH_ERR_MSG(fmt, args...) 	printk(KERN_ERR "[Touch E][%s %d] " fmt, \
 						__func__, __LINE__, ##args)
 #else
-#define TOUCH_ERR_MSG(fmt, args...)     do {} while(0)
+#define TOUCH_ERR_MSG(fmt, args...)
 #endif
 
 #if defined(TOUCH_DEBUG_PRINT)
 #define TOUCH_DEBUG_MSG(fmt, args...) 	printk(KERN_ERR "[Touch D] [%s %d] " fmt, \
 						__func__, __LINE__, ##args)
 #else
-#define TOUCH_DEBUG_MSG(fmt, args...)	do {} while(0)
+#define TOUCH_DEBUG_MSG(fmt, args...)
 #endif
 
 #define TOUCH_TRACE_FUNC() \
