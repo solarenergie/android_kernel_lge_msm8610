@@ -29,21 +29,7 @@ endif
 
 ifdef CONFIG_TOUCHSCREEN_LGE_AIT_MELFAS
 ifdef CONFIG_MACH_MSM8X10_L70P
-ait_fw_file := $(wildcard $(srctree)/firmware/melfas/mit200/l70p/*.fw)
-$(foreach var, $(ait_fw_file),  $(shell objcopy -I binary -O ihex $(var) $(var).ihex))
-
-ait_fw_list := $(subst .ihex, , $(notdir $(wildcard $(srctree)/firmware/melfas/mit200/l70p/*.ihex)))
-ait_fw_files := $(foreach var, $(ait_fw_list), melfas/mit200/l70p/$(var))
-fw-shipped-$(CONFIG_TOUCHSCREEN_LGE_AIT_MELFAS) += $(ait_fw_files)
-else
-ait_limit_txt := $(wildcard $(srctree)/firmware/melfas/mit200/*.txt)
-$(shell objcopy -I binary -O ihex $(ait_limit_txt) $(ait_limit_txt).ihex)
-ait_fw_file := $(wildcard $(srctree)/firmware/melfas/mit200/*.fw)
-$(foreach var, $(ait_fw_file),  $(shell objcopy -I binary -O ihex $(var) $(var).ihex))
-
-ait_fw_list := $(subst .ihex, , $(notdir $(wildcard $(srctree)/firmware/melfas/mit200/*.ihex)))
-ait_fw_files := $(foreach var, $(ait_fw_list), melfas/mit200/$(var))
-fw-shipped-$(CONFIG_TOUCHSCREEN_LGE_AIT_MELFAS) += $(ait_fw_files)
+fw-shipped-$(CONFIG_TOUCHSCREEN_LGE_AIT_MELFAS) += melfas/mit200/l70p/L0M45P1_1_13.fw  melfas/mit200/l70p/L0M45P2_0_05.fw
 endif
 endif
 fw-shipped-$(CONFIG_3C359) += 3com/3C359.bin
@@ -179,9 +165,6 @@ quiet_cmd_mkdir = MKDIR   $(patsubst $(objtree)/%,%,$@)
 quiet_cmd_ihex  = IHEX    $@
       cmd_ihex  = $(OBJCOPY) -Iihex -Obinary $< $@
 
-quiet_cmd_copy  = COPY    $@
-      cmd_copy  = cp $(srctree)/$@ $@
-
 quiet_cmd_ihex2fw  = IHEX2FW $@
       cmd_ihex2fw  = $(objtree)/$(obj)/ihex2fw $< $@
 
@@ -245,12 +228,6 @@ $(patsubst %,$(obj)/%.gen.o, $(fw-external-y)): $(obj)/%.gen.o: $(fwdir)/%
 $(obj)/%: $(obj)/%.ihex | $(objtree)/$(obj)/$$(dir %)
 	$(call cmd,ihex)
 
-$(obj)/%.fw: $(objtree)/$(obj)/$$(dir %.fw)
-	$(call cmd,copy)
-
-$(obj)/%.txt: $(objtree)/$(obj)/$$(dir %.txt)
-	$(call cmd,copy)
-
 # Don't depend on ihex2fw if we're installing and it already exists.
 # Putting it after | in the dependencies doesn't seem sufficient when
 # we're installing after a cross-compile, because ihex2fw has dependencies
@@ -282,7 +259,7 @@ obj-$(CONFIG_FIRMWARE_IN_KERNEL) += $(patsubst %,%.gen.o, $(fw-shipped-y))
 
 # Remove .S files and binaries created from ihex
 # (during 'make clean' .config isn't included so they're all in $(fw-shipped-))
-targets := $(patsubst $(obj)/%,%, \
+targets := $(fw-shipped-) $(patsubst $(obj)/%,%, \
 				$(shell find $(obj) -name \*.gen.S 2>/dev/null))
 
 # Without this, built-in.o won't be created when it's empty, and the
@@ -290,4 +267,3 @@ targets := $(patsubst $(obj)/%,%, \
 obj-n := dummy
 
 hostprogs-y := ihex2fw
-
