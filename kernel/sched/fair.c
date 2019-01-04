@@ -3945,7 +3945,7 @@ static inline void update_sg_lb_stats(struct sched_domain *sd,
 		sgs->group_load += load;
 		sgs->sum_nr_running += rq->nr_running;
 
-		if (nr_running > 1) *overload = true;
+		if (rq->nr_running > 1) *overload = true;
 
 		sgs->sum_weighted_load += weighted_cpuload(i);
 		if (idle_cpu(i))

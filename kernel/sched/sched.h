@@ -998,7 +998,7 @@ static inline void inc_nr_running(struct rq *rq)
 #endif
 	rq->nr_running++;
 #ifdef CONFIG_SMP
- 	if (rq->nr_running == 2) {
+ 	if (rq->nr_running >= 2) {
 		if (!rq->rd->overload)
 			rq->rd->overload = true;
 	}
