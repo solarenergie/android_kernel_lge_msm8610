@@ -1925,6 +1925,7 @@ struct file_system_type {
 		       const char *, void *);
 	struct dentry *(*mount2) (struct vfsmount *, struct file_system_type *, int,
 			       const char *, void *);
+	void *(*alloc_mnt_data) (void);
 	void (*kill_sb) (struct super_block *);
 	struct module *owner;
 	struct file_system_type * next;
